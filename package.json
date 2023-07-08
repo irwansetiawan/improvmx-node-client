@@ -28,6 +28,7 @@
     "url": "https://github.com/irwansetiawan/improvmx-node-client/issues"
   },
   "homepage": "https://github.com/irwansetiawan/improvmx-node-client#readme",
+  "keywords": ["improvmx", "email", "forwarder"],
   "devDependencies": {
     "@types/jest": "^29.5.2",
     "jest": "^29.6.1",
