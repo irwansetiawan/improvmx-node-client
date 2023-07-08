@@ -1,4 +1,4 @@
 import { ImprovMX } from '../index';
 test('ImprovMX', () => {
-  expect(true).toBe(true);
+    expect(true).toBe(true);
 });
