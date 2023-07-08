@@ -1,35 +1,90 @@
 import { ImprovMXConfig } from './improvmxconfig';
+import * as https from 'https';
 
 export class ImprovMX {
-    readonly baseUrl = 'https://api.improvmx.com/v3/';
+    readonly baseUrlHost = 'api.improvmx.com';
+    readonly baseUrlPathPrefix = '/v3';
+
     config: ImprovMXConfig;
 
     constructor(config: ImprovMXConfig) {
         this.config = config;
     }
 
-    getAccount() {}
-    getAccountWhitelabels() {}
+    getAccount() {
+        return this.get('/account/');
+    }
+    getAccountWhitelabels() {
+        return this.get('/account/whitelabels/');
+    }
 
-    getDomains() {}
+    getDomains() {
+        return this.get('/domains/');
+    }
     addDomain() {}
-    getDomain() {}
+    getDomain(domain: string) {
+        return this.get('/domains/' + encodeURI(domain));
+    }
     updateDomain() {}
     deleteDomain() {}
-    isDomainMXEntriesValid() {}
+    isDomainMXEntriesValid(domain: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/check');
+    }
 
-    getAliasesForDomain() {}
+    getAliasesForDomain(domain: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/aliases/');
+    }
     addAliasForDomain() {}
     addAliasesForDomain() {}
-    getAliasForDomain() {}
+    getAliasForDomain(domain: string, alias: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/aliases/' + encodeURI(alias));
+    }
     updateAliasForDomain() {}
     deleteAliasForDomain() {}
 
-    getLogsForDomain() {}
-    getLogsForAliasAndDomain() {}
+    getLogsForDomain(domain: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/logs');
+    }
+    getLogsForAliasAndDomain(domain: string, alias: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/logs/' + encodeURI(alias));
+    }
 
-    getSMTPCredentials() {}
+    getSMTPCredentials(domain: string) {
+        return this.get('/domains/' + encodeURI(domain) + '/credentials/');
+    }
     addSMTPCredential() {}
     updateSMTPCredential() {}
     deleteSMTPCredential() {}
+
+    private get(path: string): Promise<string> {
+        return this.request('GET', path);
+    }
+
+    private async request(method: 'GET' | 'POST', path: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let str = '';
+            const req = https.request(
+                {
+                    headers: {
+                        Authorization: 'Basic api:' + this.config.api_key,
+                    },
+                    method,
+                    host: this.baseUrlHost,
+                    path: this.baseUrlPathPrefix + path,
+                },
+                (res) => {
+                    res.on('data', (chunk) => {
+                        str += chunk;
+                    });
+                    res.on('end', () => {
+                        resolve(str);
+                    });
+                },
+            );
+            req.on('error', (err) => {
+                reject(err);
+            });
+            req.end();
+        });
+    }
 }
