@@ -40,8 +40,12 @@ export class ImprovMX {
     getDomain(domain: string) {
         return this.get('/domains/' + encodeURI(domain));
     }
-    updateDomain() {}
-    deleteDomain() {}
+    updateDomain() {
+        throw Error('Not implemented yet');
+    }
+    deleteDomain() {
+        throw Error('Not implemented yet');
+    }
     isDomainMXEntriesValid(domain: string) {
         return this.get('/domains/' + encodeURI(domain) + '/check');
     }
@@ -52,12 +56,18 @@ export class ImprovMX {
     addAliasForDomain(domain: string, alias: string, forward: string) {
         return this.post('/domains/' + encodeURI(domain) + '/aliases/', { alias, forward });
     }
-    addAliasesForDomain() {}
+    addAliasesForDomain() {
+        throw Error('Not implemented yet');
+    }
     getAliasForDomain(domain: string, alias: string) {
         return this.get('/domains/' + encodeURI(domain) + '/aliases/' + encodeURI(alias));
     }
-    updateAliasForDomain() {}
-    deleteAliasForDomain() {}
+    updateAliasForDomain() {
+        throw Error('Not implemented yet');
+    }
+    deleteAliasForDomain() {
+        throw Error('Not implemented yet');
+    }
 
     getLogsForDomain(domain: string) {
         return this.get('/domains/' + encodeURI(domain) + '/logs');
@@ -69,9 +79,15 @@ export class ImprovMX {
     getSMTPCredentials(domain: string) {
         return this.get('/domains/' + encodeURI(domain) + '/credentials/');
     }
-    addSMTPCredential() {}
-    updateSMTPCredential() {}
-    deleteSMTPCredential() {}
+    addSMTPCredential() {
+        throw Error('Not implemented yet');
+    }
+    updateSMTPCredential() {
+        throw Error('Not implemented yet');
+    }
+    deleteSMTPCredential() {
+        throw Error('Not implemented yet');
+    }
 
     private post(path: string, data: any): Promise<string> {
         return this.request('POST', path, data);
