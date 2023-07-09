@@ -60,7 +60,7 @@ export class ImprovMX {
         return this.request('GET', path);
     }
 
-    private async request(method: 'GET' | 'POST', path: string): Promise<string> {
+    private request(method: 'GET' | 'POST', path: string): Promise<string> {
         return new Promise((resolve, reject) => {
             let str = '';
             const req = https.request(
