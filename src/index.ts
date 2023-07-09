@@ -21,7 +21,9 @@ export class ImprovMX {
     getDomains() {
         return this.get('/domains/');
     }
-    addDomain() {}
+    addDomain(domain: string) {
+        return this.post('/domains/', { domain });
+    }
     getDomain(domain: string) {
         return this.get('/domains/' + encodeURI(domain));
     }
@@ -34,7 +36,9 @@ export class ImprovMX {
     getAliasesForDomain(domain: string) {
         return this.get('/domains/' + encodeURI(domain) + '/aliases/');
     }
-    addAliasForDomain() {}
+    addAliasForDomain(domain: string, alias: string, forward: string) {
+        return this.post('/domains/' + encodeURI(domain) + '/aliases/', { alias, forward });
+    }
     addAliasesForDomain() {}
     getAliasForDomain(domain: string, alias: string) {
         return this.get('/domains/' + encodeURI(domain) + '/aliases/' + encodeURI(alias));
@@ -56,17 +60,24 @@ export class ImprovMX {
     updateSMTPCredential() {}
     deleteSMTPCredential() {}
 
+    private post(path: string, data: any): Promise<string> {
+        return this.request('POST', path, data);
+    }
+
     private get(path: string): Promise<string> {
         return this.request('GET', path);
     }
 
-    private request(method: 'GET' | 'POST', path: string): Promise<string> {
+    private request(method: 'GET' | 'POST', path: string, data?: any): Promise<string> {
         return new Promise((resolve, reject) => {
             let str = '';
             const req = https.request(
                 {
                     headers: {
                         Authorization: 'Basic api:' + this.config.api_key,
+                        ...(data && {
+                            'Content-Type': 'application/json',
+                        }),
                     },
                     method,
                     host: this.baseUrlHost,
@@ -81,6 +92,9 @@ export class ImprovMX {
                     });
                 },
             );
+            if (method === 'POST' && data) {
+                req.write(JSON.stringify(data));
+            }
             req.on('error', (err) => {
                 reject(err);
             });
