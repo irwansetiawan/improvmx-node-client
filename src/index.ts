@@ -1,7 +1,7 @@
 import { ImprovMXConfig } from './improvmxconfig';
 import * as https from 'https';
 import { ImprovMXDomain } from './models';
-import { ImprovMXDomainsResponse } from './responses';
+import { ImprovMXDomainResponse, ImprovMXDomainsResponse } from './responses';
 
 export class ImprovMX {
     readonly baseUrlHost = 'api.improvmx.com';
@@ -37,8 +37,19 @@ export class ImprovMX {
     addDomain(domain: string) {
         return this.post('/domains/', { domain });
     }
-    getDomain(domain: string) {
-        return this.get('/domains/' + encodeURI(domain));
+    async getDomain(domain: string): Promise<ImprovMXDomain> {
+        let res: ImprovMXDomainResponse | null = null;
+        try {
+            res = JSON.parse(await this.get('/domains/' + encodeURI(domain)));
+        } catch (e: any) {
+            throw Error(e);
+        }
+
+        if (res?.success && res?.domain) {
+            return res.domain;
+        } else {
+            throw Error(res?.error);
+        }
     }
     updateDomain() {
         throw Error('Not implemented yet');

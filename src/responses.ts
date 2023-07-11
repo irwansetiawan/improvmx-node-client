@@ -13,3 +13,14 @@ export interface ImprovMXDomainsResponse {
     code: number;
     error: string;
 }
+
+export interface ImprovMXDomainResponse {
+    success: boolean;
+
+    // success fields
+    domain: ImprovMXDomain;
+
+    // error fields
+    code: number;
+    error: string;
+}

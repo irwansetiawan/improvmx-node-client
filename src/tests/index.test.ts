@@ -5,4 +5,4 @@ describe('ImprovMX', () => {
     test('API Key', () => {
         expect(improvMx.config.api_key).toBe('mock_api_key');
     });
-})
+});
