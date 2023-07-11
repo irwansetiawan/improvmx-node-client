@@ -1,7 +1,6 @@
 import { ImprovMXConfig } from './improvmxconfig';
 import * as https from 'https';
-import { ImprovMXDomain } from './models';
-import { ImprovMXDomainResponse, ImprovMXDomainsResponse } from './responses';
+import { ImprovMXDomainResponse, ImprovMXGetDomainResponse, ImprovMXGetDomainsResponse } from './responses';
 
 export class ImprovMX {
     readonly baseUrlHost = 'api.improvmx.com';
@@ -20,8 +19,8 @@ export class ImprovMX {
         return this.get('/account/whitelabels/');
     }
 
-    async getDomains(): Promise<ImprovMXDomain[]> {
-        let res: ImprovMXDomainsResponse | null = null;
+    async getDomains(): Promise<ImprovMXDomainResponse[]> {
+        let res: ImprovMXGetDomainsResponse | null = null;
         try {
             res = JSON.parse(await this.get('/domains/'));
         } catch (e: any) {
@@ -37,8 +36,8 @@ export class ImprovMX {
     addDomain(domain: string) {
         return this.post('/domains/', { domain });
     }
-    async getDomain(domain: string): Promise<ImprovMXDomain> {
-        let res: ImprovMXDomainResponse | null = null;
+    async getDomain(domain: string): Promise<ImprovMXDomainResponse> {
+        let res: ImprovMXGetDomainResponse | null = null;
         try {
             res = JSON.parse(await this.get('/domains/' + encodeURI(domain)));
         } catch (e: any) {

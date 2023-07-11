@@ -1,10 +1,8 @@
-import { ImprovMXDomain } from './models';
-
-export interface ImprovMXDomainsResponse {
+export interface ImprovMXGetDomainsResponse {
     success: boolean;
 
     // success fields
-    domains: ImprovMXDomain[];
+    domains: ImprovMXDomainResponse[];
     limit: number;
     page: number;
     total: number;
@@ -14,13 +12,32 @@ export interface ImprovMXDomainsResponse {
     error: string;
 }
 
-export interface ImprovMXDomainResponse {
+export interface ImprovMXGetDomainResponse {
     success: boolean;
 
     // success fields
-    domain: ImprovMXDomain;
+    domain: ImprovMXDomainResponse;
 
     // error fields
     code: number;
     error: string;
+}
+
+export interface ImprovMXDomainResponse {
+    active: boolean;
+    added: number;
+    aliases: ImprovMXAliasResponse[];
+    banned: boolean;
+    display: string;
+    dkim_selector: string;
+    domain: string;
+    notification_email: string | null;
+    webhook: string | null;
+    whitelabel: string | null;
+}
+
+export interface ImprovMXAliasResponse {
+    alias: string;
+    forward: string;
+    id: number;
 }
