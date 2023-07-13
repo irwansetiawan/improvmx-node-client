@@ -1,6 +1,12 @@
 import { ImprovMXConfig } from './improvmxconfig';
 import * as https from 'https';
-import { ImprovMXDomainResponse, ImprovMXGetDomainResponse, ImprovMXGetDomainsResponse } from './responses';
+import {
+    ImprovMXAliasResponse,
+    ImprovMXDomainResponse,
+    ImprovMXGetDomainAliasesResponse,
+    ImprovMXGetDomainResponse,
+    ImprovMXGetDomainsResponse,
+} from './responses';
 
 export class ImprovMX {
     readonly baseUrlHost = 'api.improvmx.com';
@@ -60,8 +66,19 @@ export class ImprovMX {
         return this.get('/domains/' + encodeURI(domain) + '/check');
     }
 
-    getAliasesForDomain(domain: string) {
-        return this.get('/domains/' + encodeURI(domain) + '/aliases/');
+    async getAliasesForDomain(domain: string): Promise<ImprovMXAliasResponse[]> {
+        let res: ImprovMXGetDomainAliasesResponse | null = null;
+        try {
+            res = JSON.parse(await this.get('/domains/' + encodeURI(domain) + '/aliases/'));
+        } catch (e: any) {
+            throw Error(e);
+        }
+
+        if (res?.success && res?.aliases) {
+            return res.aliases;
+        } else {
+            throw Error(res?.error);
+        }
     }
     addAliasForDomain(domain: string, alias: string, forward: string) {
         return this.post('/domains/' + encodeURI(domain) + '/aliases/', { alias, forward });

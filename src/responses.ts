@@ -23,6 +23,20 @@ export interface ImprovMXGetDomainResponse {
     error: string;
 }
 
+export interface ImprovMXGetDomainAliasesResponse {
+    success: boolean;
+
+    // success fields
+    aliases: ImprovMXAliasResponse[];
+    limit: number;
+    page: number;
+    total: number;
+
+    // error fields
+    code: number;
+    error: string;
+}
+
 export interface ImprovMXDomainResponse {
     active: boolean;
     added: number;
