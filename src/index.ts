@@ -3,6 +3,7 @@ import * as https from 'https';
 import {
     ImprovMXAliasResponse,
     ImprovMXDomainResponse,
+    ImprovMXGetDomainAliasResponse,
     ImprovMXGetDomainAliasesResponse,
     ImprovMXGetDomainResponse,
     ImprovMXGetDomainsResponse,
@@ -86,8 +87,19 @@ export class ImprovMX {
     addAliasesForDomain() {
         throw Error('Not implemented yet');
     }
-    getAliasForDomain(domain: string, alias: string) {
-        return this.get('/domains/' + encodeURI(domain) + '/aliases/' + encodeURI(alias));
+    async getAliasForDomain(domain: string, alias: string): Promise<ImprovMXAliasResponse> {
+        let res: ImprovMXGetDomainAliasResponse | null = null;
+        try {
+            res = JSON.parse(await this.get('/domains/' + encodeURI(domain) + '/aliases/' + encodeURI(alias)));
+        } catch (e: any) {
+            throw Error(e);
+        }
+
+        if (res?.success && res?.alias) {
+            return res.alias;
+        } else {
+            throw Error(res?.error);
+        }
     }
     updateAliasForDomain() {
         throw Error('Not implemented yet');

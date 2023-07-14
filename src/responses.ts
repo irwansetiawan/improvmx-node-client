@@ -37,6 +37,17 @@ export interface ImprovMXGetDomainAliasesResponse {
     error: string;
 }
 
+export interface ImprovMXGetDomainAliasResponse {
+    success: boolean;
+
+    // success fields
+    alias: ImprovMXAliasResponse;
+
+    // error fields
+    code: number;
+    error: string;
+}
+
 export interface ImprovMXDomainResponse {
     active: boolean;
     added: number;
