@@ -124,8 +124,18 @@ export class ImprovMX {
             throw Error(res?.error);
         }
     }
-    getLogsForAliasAndDomain(domain: string, alias: string) {
-        return this.get('/domains/' + encodeURI(domain) + '/logs/' + encodeURI(alias));
+    async getLogsForAliasAndDomain(domain: string, alias: string): Promise<ImprovMXLogResponse[]> {let res: ImprovMXGetDomainLogsResponse | null = null;
+        try {
+            res = JSON.parse(await this.get('/domains/' + encodeURI(domain) + '/logs/' + encodeURI(alias)));
+        } catch (e: any) {
+            throw Error(e);
+        }
+
+        if (res?.success && res?.logs) {
+            return res.logs;
+        } else {
+            throw Error(res?.error);
+        }
     }
 
     getSMTPCredentials(domain: string) {
