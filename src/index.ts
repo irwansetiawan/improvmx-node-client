@@ -5,8 +5,10 @@ import {
     ImprovMXDomainResponse,
     ImprovMXGetDomainAliasResponse,
     ImprovMXGetDomainAliasesResponse,
+    ImprovMXGetDomainLogsResponse,
     ImprovMXGetDomainResponse,
     ImprovMXGetDomainsResponse,
+    ImprovMXLogResponse,
 } from './responses';
 
 export class ImprovMX {
@@ -108,8 +110,19 @@ export class ImprovMX {
         throw Error('Not implemented yet');
     }
 
-    getLogsForDomain(domain: string) {
-        return this.get('/domains/' + encodeURI(domain) + '/logs');
+    async getLogsForDomain(domain: string): Promise<ImprovMXLogResponse[]> {
+        let res: ImprovMXGetDomainLogsResponse | null = null;
+        try {
+            res = JSON.parse(await this.get('/domains/' + encodeURI(domain) + '/logs'));
+        } catch (e: any) {
+            throw Error(e);
+        }
+
+        if (res?.success && res?.logs) {
+            return res.logs;
+        } else {
+            throw Error(res?.error);
+        }
     }
     getLogsForAliasAndDomain(domain: string, alias: string) {
         return this.get('/domains/' + encodeURI(domain) + '/logs/' + encodeURI(alias));

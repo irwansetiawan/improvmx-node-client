@@ -66,3 +66,46 @@ export interface ImprovMXAliasResponse {
     forward: string;
     id: number;
 }
+
+export interface ImprovMXGetDomainLogsResponse {
+    success: boolean;
+
+    // success fields
+    logs: ImprovMXLogResponse[];
+
+    // error fields
+    code: number;
+    error: string;
+}
+
+export interface ImprovMXLogResponse {
+    created: number;
+    created_raw: number;
+    events: ImprovMXLogEventResponse[];
+    forward: ImprovMXLogEventRecipientResponse;
+    hostname: string;
+    id: string;
+    messageId: string;
+    recipient: ImprovMXLogEventRecipientResponse;
+    saved: boolean;
+    sender: ImprovMXLogEventRecipientResponse;
+    subject: string;
+    transport: string;
+    url: string;
+}
+
+export interface ImprovMXLogEventResponse {
+    code: number;
+    created: number;
+    id: string;
+    local: string;
+    message: string;
+    recipient: ImprovMXLogEventRecipientResponse,
+    server: string;
+    status: 'QUEUED' | 'REFUSED' | 'DELIVERED' | 'SOFT-BOUNCE' | 'HARD-BOUNCE'
+}
+
+export interface ImprovMXLogEventRecipientResponse {
+    email: string;
+    name: null;
+}
